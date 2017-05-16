@@ -1,3 +1,0 @@
-visual Studio Code - Git - Jenkins - FTP 배포까지 연동...
-
-굳
