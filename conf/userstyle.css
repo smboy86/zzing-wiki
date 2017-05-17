@@ -1,0 +1,18 @@
+
+@import url(//fonts.googleapis.com/earlyaccess/jejugothic.css);
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothic.css);
+@import url(//fonts.googleapis.com/earlyaccess/nanumgothiccoding.css);
+
+h1, h2, h3, h4 {
+    font-family: "Nanum Gothic";
+    font-style: normal;
+}
+
+pre, code {
+    font-family: "Nanum Gothic Coding", monospace;
+} 
+
+.page ,p {
+    font-family: 'Jeju Gothic', sans-serif;
+    font-size: 1.1em;
+} 
