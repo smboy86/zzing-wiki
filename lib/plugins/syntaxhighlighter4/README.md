@@ -1,29 +1,13 @@
-[![GitHub release](https://img.shields.io/github/release/crazy-max/dokuwiki-plugin-syntaxhighlighter4.svg?style=flat-square)](https://github.com/crazy-max/dokuwiki-plugin-syntaxhighlighter4/releases)
-[![Minimum DokuWiki Version](https://img.shields.io/badge/dokuwiki-%3E%3D%20Elenor%20of%20Tsort-yellow.svg?style=flat-square)](https://www.dokuwiki.org/releasenames)
-[![Code Quality](https://img.shields.io/codacy/grade/440e4b5de2ee4d37978a8e9e19f4b76f.svg?style=flat-square)](https://www.codacy.com/app/crazy-max/dokuwiki-plugin-syntaxhighlighter4)
-[![StyleCI](https://styleci.io/repos/61027126/shield?style=flat-square)](https://styleci.io/repos/61027126)
-[![Donate Paypal](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square)](https://www.paypal.me/crazyws)
+<p align="center"><a href="https://github.com/crazy-max/dokuwiki-plugin-syntaxhighlighter4" target="_blank"><img width="100" src="https://raw.githubusercontent.com/crazy-max/dokuwiki-plugin-syntaxhighlighter4/master/resources/logo-128.png"></a></p>
 
-# SyntaxHighlighter4 DokuWiki Plugin
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-- [About](#about)
-- [Download and Installation](#download-and-installation)
-- [Syntax and Usage](#syntax-and-usage)
-  - [Brush](#brush)
-  - [Options](#options)
-  - [Defaults](#defaults)
-- [Example](#example)
-- [Features](#features)
-  - [Copy to clipboard](#copy-to-clipboard)
-  - [Highlight a range of lines](#highlight-a-range-of-lines)
-- [Issues and Features](#issues-and-features)
-- [Changelog](#changelog)
-- [License](#license)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<p align="center">
+  <a href="https://github.com/crazy-max/dokuwiki-plugin-syntaxhighlighter4/releases"><img src="https://img.shields.io/github/release/crazy-max/dokuwiki-plugin-syntaxhighlighter4.svg?style=flat-square" alt="Github Release"></a>
+  <a href="https://www.dokuwiki.org/releasenames"><img src="https://img.shields.io/badge/dokuwiki-%3E%3D%20Elenor%20of%20Tsort-yellow.svg?style=flat-square" alt="Minimum DokuWiki Version"></a>
+  <a href="https://www.codacy.com/app/crazy-max/dokuwiki-plugin-syntaxhighlighter4"><img src="https://img.shields.io/codacy/grade/440e4b5de2ee4d37978a8e9e19f4b76f.svg?style=flat-square" alt="Code Quality"></a>
+  <a href="https://styleci.io/repos/61027126"><img src="https://styleci.io/repos/61027126/shield?style=flat-square" alt="StyleCI"></a>
+  <a href="https://beerpay.io/crazy-max/dokuwiki-plugin-syntaxhighlighter4"><img src="https://img.shields.io/beerpay/crazy-max/dokuwiki-plugin-syntaxhighlighter4.svg?style=flat-square" alt="Beerpay"></a>
+  <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NMMSKWE5DPNFU"><img src="https://img.shields.io/badge/donate-paypal-7057ff.svg?style=flat-square" alt="Donate Paypal"></a>
+</p>
 
 ## About
 
@@ -50,7 +34,7 @@ If you install this plugin manually, make sure it is installed in `lib/plugins/s
 ### Brush
 
 The brush (language) that SyntaxHighlighter should use. Defaults to "text" if none is provided.<br />
-See [SyntaxHighlighter Brushes page](https://github.com/syntaxhighlighter/syntaxhighlighter/wiki/Brushes-and-Themes) for a complete list of available brushes.
+See the section [brushes and themes](#list-of-brushes-and-themes) for a complete list of available brushes.
 
 ### Options
 
@@ -66,6 +50,7 @@ The plugin handles the [Block Title from SyntaxHighlighter 3](http://alexgorbatc
 * **htmlScript**: Allows you to highlight a mixture of HTML/XML code and a script which is very common in web development. Setting this value to true requires that you have shBrushXml.js loaded and that the brush you are using supports this feature `(default false)`
 * **smartTabs**: Allows you to turn smart tabs feature on and off `(default true)`
 * **tabSize**: Allows you to adjust tab size `(default 4)`
+* **override**: Override `<code>` DokuWiki syntax `(default false)`
 
 ## Example
 
@@ -102,7 +87,7 @@ The plugin handles the [Block Title from SyntaxHighlighter 3](http://alexgorbatc
 
 Expected result:
 
-![](https://raw.githubusercontent.com/crazy-max/dokuwiki-plugin-syntaxhighlighter4/master/screenshots/example.png)
+![](resources/example.png)
 
 ## Features
 
@@ -144,16 +129,73 @@ Example:
 
 Expected result:
 
-![](https://raw.githubusercontent.com/crazy-max/dokuwiki-plugin-syntaxhighlighter4/master/screenshots/highlight-range.png)
+![](resources/highlight-range.png)
 
-## Issues and Features
+### List of brushes and themes
 
-* https://github.com/crazy-max/dokuwiki-plugin-syntaxhighlighter4/issues
+* **[Official brushes](https://github.com/syntaxhighlighter/syntaxhighlighter/wiki/Brushes-and-Themes)**
+  * applescript
+  * as3
+  * base
+  * bash
+  * coldfusion
+  * cpp
+  * csharp
+  * css
+  * delphi
+  * diff
+  * erlang
+  * groovy
+  * haxe
+  * java
+  * javafx
+  * javascript
+  * perl
+  * php
+  * plain
+  * powershell
+  * python
+  * ruby
+  * sass
+  * scala
+  * sql
+  * swift
+  * tap
+  * typescript
+  * vb
+  * xml
+* **Custom brushes**
+  * halcon
+  * IEC61131
+  * kotlin
+  * latex
+  * Makefile
+  * mel
+  * objective-c
+  * yaml
+* **[Official themes](https://github.com/syntaxhighlighter/syntaxhighlighter/wiki/Brushes-and-Themes)**
+  * default
+  * django
+  * eclipse
+  * emacs
+  * fadetogrey
+  * mdultra
+  * midnight
+  * rdark
+  * swift
+* **Custom themes**
+  *
 
-## Changelog
+## How can i help ?
 
-See `CHANGELOG.md`.
+All kinds of contributions are welcomed :raised_hands:!<br />
+The most basic way to show your support is to star :star2: the project, or to raise issues :speech_balloon:<br />
+But we're not gonna lie to each other, I'd rather you buy me a beer or two :beers:!
+
+[![Beerpay](https://beerpay.io/crazy-max/dokuwiki-plugin-syntaxhighlighter4/badge.svg?style=beer-square)](https://beerpay.io/crazy-max/dokuwiki-plugin-syntaxhighlighter4)
+or [![Paypal](resources/paypal.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=NMMSKWE5DPNFU)
 
 ## License
 
-GPLv2. See `LICENSE` for more details.
+GPLv2. See `LICENSE` for more details.<br />
+Icon credit to [Snip Master](http://www.snipicons.com/).

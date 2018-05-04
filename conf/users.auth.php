@@ -9,5 +9,5 @@
 # login:passwordhash:Real Name:email:groups,comma,seperated
 
 
-smpark:$1$A6PUUiSJ$kyTgP4eETGfn1haA6eFIX/:성민:smboy86@naver.com:admin,user
-nicewoog:$1$1qRz2W6l$jDjnny67GIZEMQPvj.QZx0:위키성욱:nicewoog@naver.com:user
+smpark:$1$ZWq8SZPD$578120WvoSvbXtNkl8yWx.:smpark:smboy86@naver.com:admin,user
+nicewoog:$1$ovh8Ilvw$A/is1Ho93dq1dWxfb1zCo.:박성욱:nicewoog@naver.com:user

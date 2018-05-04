@@ -15,7 +15,7 @@
 /* Basic Settings */
 $conf['title']       = 'DokuWiki';        //what to show in the title
 $conf['start']       = 'start';           //name of start page
-$conf['lang']        = 'ko';              //your language
+$conf['lang']        = 'en';              //your language
 $conf['template']    = 'dokuwiki';         //see lib/tpl directory
 $conf['tagline']     = '';                //tagline in header (if template supports it)
 $conf['sidebar']     = 'sidebar';         //name of sidebar in root namespace (if template supports it)
@@ -52,12 +52,12 @@ $conf['sneaky_index']= 0;                 //check for namespace read permission 
 $conf['hidepages']   = '';                //Regexp for pages to be skipped from RSS, Search and Recent Changes
 
 /* Authentication Settings */
-$conf['useacl']      = 1;                //Use Access Control Lists to restrict access?
+$conf['useacl']      = 0;                //Use Access Control Lists to restrict access?
 $conf['autopasswd']  = 1;                //autogenerate passwords and email them to user
 $conf['authtype']    = 'authplain';      //which authentication backend should be used
 $conf['passcrypt']   = 'smd5';           //Used crypt method (smd5,md5,sha1,ssha,crypt,mysql,my411)
 $conf['defaultgroup']= 'user';           //Default groups new Users are added to
-$conf['superuser']   = '@admin';    //The admin can be user or @group or comma separated list user1,@group1,user2
+$conf['superuser']   = '!!not set!!';    //The admin can be user or @group or comma separated list user1,@group1,user2
 $conf['manager']     = '!!not set!!';    //The manager can be user or @group or comma separated list user1,@group1,user2
 $conf['profileconfirm'] = 1;             //Require current password to confirm changes to user profile
 $conf['rememberme'] = 1;                 //Enable/disable remember me on login
@@ -108,6 +108,7 @@ $conf['subscribe_time'] = 24*60*60;      //Time after which digests / lists are 
 $conf['notify']      = '';               //send change info to this email (leave blank for nobody)
 $conf['registernotify'] = '';            //send info about newly registered users to this email (leave blank for nobody)
 $conf['mailfrom']    = '';               //use this email when sending mails
+$conf['mailreturnpath']    = '';         //use this email as returnpath for bounce mails
 $conf['mailprefix']  = '';               //use this as prefix of outgoing mails
 $conf['htmlmail']    = 1;                //send HTML multipart mails
 
@@ -155,6 +156,8 @@ $conf['broken_iua']  = 0;                //Platform with broken ignore_user_abor
 $conf['xsendfile']   = 0;                //Use X-Sendfile (1 = lighttpd, 2 = standard)
 $conf['renderer_xhtml'] = 'xhtml';       //renderer to use for main page generation
 $conf['readdircache'] = 0;               //time cache in second for the readdir operation, 0 to deactivate.
+$conf['search_nslimit'] = 0;             //limit the search to the current X namespaces
+$conf['search_fragment'] = 'exact';      //specify the default fragment search behavior
 
 /* Network Settings */
 $conf['dnslookups'] = 1;                 //disable to disallow IP to hostname lookups

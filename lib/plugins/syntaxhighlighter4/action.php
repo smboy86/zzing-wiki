@@ -3,7 +3,7 @@
  * DokuWiki Plugin syntaxhighlighter4 (Action Component).
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @author  Cr@zy <webmaster@crazyws.fr>
+ * @author  CrazyMax <webmaster@crazyws.fr>
  */
 
 // must be run within Dokuwiki
@@ -11,8 +11,8 @@ if (!defined('DOKU_INC')) {
     die();
 }
 
-class action_plugin_syntaxhighlighter4 extends DokuWiki_Action_Plugin
-{
+class action_plugin_syntaxhighlighter4 extends DokuWiki_Action_Plugin {
+
     /**
      * Registers a callback function for a given event.
      *
@@ -20,8 +20,7 @@ class action_plugin_syntaxhighlighter4 extends DokuWiki_Action_Plugin
      *
      * @return void
      */
-    public function register(Doku_Event_Handler $controller)
-    {
+    public function register(Doku_Event_Handler $controller) {
         $controller->register_hook('TPL_METAHEADER_OUTPUT', 'BEFORE', $this, 'handle_metaheader');
         $controller->register_hook('TPL_ACT_RENDER', 'AFTER', $this, 'handle_jsprocessing');
     }
@@ -35,13 +34,19 @@ class action_plugin_syntaxhighlighter4 extends DokuWiki_Action_Plugin
      *
      * @return void
      */
-    public function handle_metaheader(Doku_Event $event, $param)
-    {
+    public function handle_metaheader(Doku_Event $event, $param) {
         // Add SyntaxHighlighter theme.
         $event->data['link'][] = array(
             'rel' => 'stylesheet',
             'type' => 'text/css',
             'href' => DOKU_BASE.'lib/plugins/syntaxhighlighter4/dist/'.$this->getConf('theme'),
+        );
+
+        // Override some CSS
+        $event->data['link'][] = array(
+            'rel' => 'stylesheet',
+            'type' => 'text/css',
+            'href' => DOKU_BASE.'lib/plugins/syntaxhighlighter4/dist/override.css',
         );
 
         // Register SyntaxHighlighter javascript.
@@ -52,8 +57,7 @@ class action_plugin_syntaxhighlighter4 extends DokuWiki_Action_Plugin
         );
     }
 
-    public function handle_jsprocessing(Doku_Event $event, $param)
-    {
+    public function handle_jsprocessing(Doku_Event $event, $param) {
         global $ID, $INFO;
 
         // Ensures code will be written only on base page

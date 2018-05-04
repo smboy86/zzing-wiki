@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>SyntaxHighlighter</title>
   <script type="text/javascript" src="syntaxhighlighter.js"></script>
-  <link type="text/css" rel="stylesheet" href="theme-default.css">
+  <link type="text/css" rel="stylesheet" href="theme.css">
   <style type="text/css">
     body {
       background: white;
@@ -2502,6 +2502,263 @@ End Namespace
 &lt;!--
   Multiline comments &lt;b&gt;tag&lt;/b&gt;
 --&gt;
+
+</pre>
+
+
+
+<h1 style="border-bottom: 2px solid black;">repos/brush-halcon/brush.js</h1>
+<pre class="brush: repos/brush-halcon/brush.js;">
+* 1D_barcode_test.hdev
+
+dev_set_draw (&#39;margin&#39;)
+dev_update_window (&#39;off&#39;)
+dev_set_line_width (2)
+
+codeType := &#39;Code 128&#39;
+*codeType := &#39;auto&#39;
+
+read_image(imgOriginal, &#39;20160624_115458.png&#39;)
+get_image_size(imgOriginal, imageWidth, imageHeight)
+
+* sharpen image
+emphasize(imgOriginal, imgOriginal, 7, 7, 1)
+
+* convert to grayscale, Otsu thresh to a region, morph. op. to fill holes, then convert region back to an image
+rgb1_to_gray(imgOriginal, imgOriginal)
+binary_threshold(imgOriginal, regThresh, &#39;max_separability&#39;, &#39;light&#39;, UsedThreshold)
+erosion_rectangle1(regThresh, regThresh, 3, 3)
+dilation_rectangle1(regThresh, regThresh, 3, 3)
+region_to_bin(regThresh, imgOriginal, 255, 0, imageWidth, imageHeight)
+
+* can rotate or scale with this if needed
+hom_mat2d_identity(homMat2D)
+*hom_mat2d_rotate(homMat2D, rad(-40), imageWidth / 2, imageHeight / 2, homMat2D)
+hom_mat2d_scale(homMat2D, 0.5, 0.5, 0, 0, homMat2D)
+affine_trans_image(imgOriginal, imgOriginal, homMat2D, &#39;bilinear&#39;, &#39;true&#39;)
+
+* use this to un-over-expose the image if necessary
+*scale_image_range(imgOriginal, imgOriginal, [ 0, 0 ], [ 255, 225 ])
+
+* instantiate the bar code model
+create_bar_code_model([], [], barCodeHandle)
+
+* various bar code params if needed . . .
+set_bar_code_param(barCodeHandle, &#39;persistence&#39;, 1)
+* set_bar_code_param(barCodeHandle, &#39;element_size_min&#39;, 1.0)
+* set_bar_code_param(barCodeHandle, &#39;num_scanlines&#39;, 2)
+* set_bar_code_param(barCodeHandle, &#39;element_size_max&#39;, 20.0)
+* set_bar_code_param(barCodeHandle, &#39;majority_voting&#39;, &#39;true&#39;)
+* set_bar_code_param(barCodeHandle, &#39;meas_param_estimation&#39;, &#39;true&#39;)
+* set_bar_code_param(barCodeHandle, &#39;start_stop_tolerance&#39;, &#39;low&#39;)
+
+dev_close_window()
+dev_open_window(50, 300, imageWidth / 2, imageHeight / 2, &#39;black&#39;, windowHandle)
+
+set_display_font(windowHandle, 14, &#39;mono&#39;, &#39;true&#39;, &#39;false&#39;)
+dev_display(imgOriginal)
+dev_set_color(&#39;green&#39;)
+
+find_bar_code(imgOriginal, barCodeRegions, barCodeHandle, codeType, decodedDataStrings)
+
+dev_set_color(&#39;green&#39;)
+dev_display(barCodeRegions)
+codeIsReadable := decodedDataStrings != []
+if(codeIsReadable)
+    disp_message(windowHandle, &#39;Code:&#39; + decodedDataStrings, &#39;window&#39;, 32, 12, &#39;forest green&#39;, &#39;true&#39;)
+else
+    disp_message(windowHandle, &#39;Code: not readable&#39;, &#39;window&#39;, 32, 12, &#39;red&#39;, &#39;true&#39;)
+endif
+disp_continue_message(windowHandle, &#39;black&#39;, &#39;true&#39;)
+
+get_bar_code_object(candidateRegions, barCodeHandle, &#39;all&#39;, &#39;candidate_regions&#39;)
+count_obj(candidateRegions, numberCandidates)
+if (numberCandidates == 0)
+    disp_message(windowHandle, &#39;No candidates found&#39;, &#39;window&#39;, 32, 12, &#39;red&#39;, &#39;true&#39;)
+else
+    dev_set_color (&#39;magenta&#39;)
+    dev_display (candidateRegions)
+    disp_message(windowHandle, &#39;candidateRegions: &#39; + numberCandidates, &#39;window&#39;, 52, 12, &#39;magenta&#39;, &#39;true&#39;)
+endif
+
+get_bar_code_result(barCodeHandle, &#39;all&#39;, &#39;decoded_types&#39;, decodedTypes)
+get_bar_code_result(barCodeHandle, 0, &#39;status&#39;, status0)
+
+if (|decodedTypes| == 0)
+    get_bar_code_object(allScanlines, barCodeHandle, &#39;all&#39;, &#39;scanlines_all&#39;)
+    dev_set_color(&#39;red&#39;)
+    dev_display(allScanlines)
+    disp_message (windowHandle, &#39;No valid scanlines found&#39;, &#39;window&#39;, 72, 12, &#39;red&#39;, &#39;true&#39;)
+else
+    get_bar_code_object (validScanlines, barCodeHandle, 0, &#39;scanlines_valid&#39;)
+    dev_set_color(&#39;green&#39;)
+    dev_display(validScanlines)
+    disp_message(windowHandle, &#39;Valid scanlines detected&#39;, &#39;window&#39;, 72, 12, &#39;forest green&#39;, &#39;true&#39;)
+endif
+
+</pre>
+
+
+
+<h1 style="border-bottom: 2px solid black;">repos/brush-IEC61131/brush.js</h1>
+<pre class="brush: repos/brush-IEC61131/brush.js;">
+(* Note samples based on ones available at http://infosys.beckhoff.com/ *)
+
+TYPE TSimpleStruct :
+STRUCT
+	lrealVal: LREAL := 1.23;
+	dintVal1: DINT := 120000;
+END_STRUCT
+END_TYPE
+
+TYPE TComplexStruct :
+STRUCT
+	intVal : INT:=1200;
+	dintArr: ARRAY[0..3] OF DINT:= 1,2,3,4;
+	boolVal: BOOL := FALSE;
+	byteVal: BYTE:=10;
+	stringVal : STRING(5) := &#39;hallo&#39;;
+	simpleStruct1: TSimpleStruct;
+END_STRUCT
+END_TYPE
+
+PROGRAM MAIN
+VAR
+
+  REAL32_1 AT %MB0 : REAL;  (* 1 *)
+  REAL32_2 AT %MB4 : REAL;  (* 2 *)
+  REAL32_3 AT %MB8 : REAL;  (* 3 *)
+  REAL32_4 AT %MB12: REAL;  (* 4 *)
+  REAL32_5 AT %MB16: REAL;  (* 5 *)
+
+  PLCVar : ARRAY [0..99] OF INT;
+  Index: BYTE;
+  text : STRING[30] := &#39;hello&#39;;
+  Time1:TIME := T#21h33m23s231ms;
+  Time2:TIME := T#21H;
+  Time3:TIME := T#33M21MS;
+  DateTime1:DT:=DT#1993-06-12-15:36:55.40;
+  tod1:TOD:=TIME_OF_DAY#12H33M2S;
+  Date1:DATE:=DATE#1993-06-12;
+  Bool1:BOOL := FALSE;
+  int1:INT := 30000;
+  dint1:DINT:=125000;
+  usint1:USINT:=200;
+  real1:REAL:= 1.2;
+  lreal1:LREAL:=3.5;
+
+  str1:STRING := &#39;this is a test string&#39;;
+  str2:STRING(5) := &#39;hallo&#39;;
+
+  complexStruct1 : TComplexStruct;
+
+END_VAR
+
+FOR Index := 0 TO 99 DO
+  PLCVar[Index] := 3500 + INDEX;
+END_FOR
+
+</pre>
+
+
+
+<h1 style="border-bottom: 2px solid black;">repos/brush-kotlin/brush.js</h1>
+<pre class="brush: repos/brush-kotlin/brush.js;">
+﻿package demo
+
+/**
+ * This class supports greeting people by name.
+ *
+ * @property name The name of the person to be greeted.
+ */
+class Greeter(val name: String) {
+
+    /**
+     * Prints the greeting to the standard output.
+     */
+    fun greet() {
+        println(&#34;Hello $name!&#34;)
+    }
+}
+
+fun main(args: Array&lt;String&gt;) {
+    Greeter(args[0]).greet()
+}
+</pre>
+
+
+
+<h1 style="border-bottom: 2px solid black;">repos/brush-latex/brush.js</h1>
+<pre class="brush: repos/brush-latex/brush.js;">
+/**
+ * This is a LaTeX sample.
+ */
+\documentclass{article}
+\usepackage[utf8]{inputenc} %File encoding
+\begin{document}
+\LaTeX
+\end{document}
+
+
+</pre>
+
+
+
+<h1 style="border-bottom: 2px solid black;">repos/brush-Makefile/brush.js</h1>
+<pre class="brush: repos/brush-Makefile/brush.js;">
+
+# This is a Makefile sample.
+
+%.run: $(OUT_APP_CLASS)/%.jar
+ $(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath=&#34;$(OFFICE_PROGRAM_PATH)&#34; -jar $&lt;
+ 
+.PHONY: clean
+clean :
+ -$(DELRECURSIVE) $(subst /,$(PS),$(OUT_APP_CLASS))
+</pre>
+
+
+
+<h1 style="border-bottom: 2px solid black;">repos/brush-mel/brush.js</h1>
+<pre class="brush: repos/brush-mel/brush.js;">
+/****************************
+ * Multiline block comments *
+ ****************************/
+
+// Create a simple hello world procedure.
+proc helloWorld() {
+	// Output &#34;Hello, world!&#34; message.
+	print &#34;Hello, world!\n&#34;;
+}
+
+// Call helloWorld procedure.
+helloWorld;
+
+</pre>
+
+
+
+<h1 style="border-bottom: 2px solid black;">repos/brush-objective-c/brush.js</h1>
+<pre class="brush: repos/brush-objective-c/brush.js;">
+@implementation XYZPerson
+- (void)sayHello {
+    [self saySomething:@&#34;Hello, world!&#34;];
+}
+- (void)saySomething:(NSString *)greeting {
+    NSLog(@&#34;%@&#34;, greeting);
+}
+@end
+</pre>
+
+
+
+<h1 style="border-bottom: 2px solid black;">repos/brush-yaml/brush.js</h1>
+<pre class="brush: repos/brush-yaml/brush.js;">
+Language: JavaScript
+Options:
+  a: 4
+  b: 6
+
 
 </pre>
 

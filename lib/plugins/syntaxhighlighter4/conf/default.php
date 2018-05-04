@@ -2,8 +2,9 @@
 /**
  * Default settings for the syntaxhighlighter4 plugin.
  *
- * @author Cr@zy <webmaster@crazyws.fr>
+ * @author CrazyMax <webmaster@crazyws.fr>
  */
+
 $conf['theme'] = 'theme-default.css';
 
 // defaults
@@ -13,3 +14,4 @@ $conf['gutter'] = 1;
 $conf['htmlScript'] = 0;
 $conf['smartTabs'] = 1;
 $conf['tabSize'] = 4;
+$conf['override'] = '';

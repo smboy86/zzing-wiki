@@ -2,8 +2,9 @@
 /**
  * Options for the syntaxhighlighter4 plugin.
  *
- * @author Cr@zy <webmaster@crazyws.fr>
+ * @author CrazyMax <webmaster@crazyws.fr>
  */
+
 $meta['theme'] = array('multichoice', '_choices' => array(
     'theme-default.css',
     'theme-django.css',
@@ -23,3 +24,4 @@ $meta['gutter'] = array('onoff');
 $meta['htmlScript'] = array('onoff');
 $meta['smartTabs'] = array('onoff');
 $meta['tabSize'] = array('numeric');
+$meta['override'] = array('multicheckbox', '_choices' => array('code','file'));

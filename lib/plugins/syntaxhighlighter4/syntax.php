@@ -3,7 +3,7 @@
  * DokuWiki Plugin syntaxhighlighter4 (Syntax Component).
  *
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
- * @author  Cr@zy <webmaster@crazyws.fr>
+ * @author  CrazyMax <webmaster@crazyws.fr>
  */
 
 // must be run within Dokuwiki
@@ -23,29 +23,28 @@ if (!defined('DOKU_PLUGIN')) {
 
 require_once DOKU_PLUGIN.'syntax.php';
 
-class syntax_plugin_syntaxhighlighter4 extends DokuWiki_Syntax_Plugin
-{
+class syntax_plugin_syntaxhighlighter4 extends DokuWiki_Syntax_Plugin {
+
+    protected $syntax;
+
     /**
      * @return string Syntax mode type
      */
-    public function getType()
-    {
+    public function getType() {
         return 'protected';
     }
 
     /**
      * @return string Paragraph type
      */
-    public function getPType()
-    {
+    public function getPType() {
         return 'block';
     }
 
     /**
      * @return int Sort order - Low numbers go before high numbers
      */
-    public function getSort()
-    {
+    public function getSort() {
         return 195;
     }
 
@@ -54,14 +53,20 @@ class syntax_plugin_syntaxhighlighter4 extends DokuWiki_Syntax_Plugin
      *
      * @param string $mode Parser mode
      */
-    public function connectTo($mode)
-    {
+    public function connectTo($mode) {
         $this->Lexer->addEntryPattern('<sxh(?=[^\r\n]*?>.*?</sxh>)', $mode, 'plugin_syntaxhighlighter4');
+        $tags = explode(',', $this->getConf('override'));
+        foreach ($tags as $tag) {
+            $this->Lexer->addEntryPattern('<' . $tag . '(?=[^\r\n]*?>.*?</' . $tag . '>)', $mode, 'plugin_syntaxhighlighter4');
+        }
     }
 
-    public function postConnect()
-    {
+    public function postConnect() {
         $this->Lexer->addExitPattern('</sxh>', 'plugin_syntaxhighlighter4');
+        $tags = explode(',', $this->getConf('override'));
+        foreach ($tags as $tag) {
+            $this->Lexer->addExitPattern('</' . $tag . '>', 'plugin_syntaxhighlighter4');
+        }
     }
 
     /**
@@ -74,19 +79,15 @@ class syntax_plugin_syntaxhighlighter4 extends DokuWiki_Syntax_Plugin
      *
      * @return array Data for the renderer
      */
-    public function handle($match, $state, $pos, Doku_Handler $handler)
-    {
+    public function handle($match, $state, $pos, Doku_Handler $handler) {
         switch ($state) {
             case DOKU_LEXER_ENTER:
-                $this->syntax = substr($match, 1);
-
+                $this->syntax = strtolower(substr($match, 1));
                 return false;
-
             case DOKU_LEXER_UNMATCHED:
                 // will include everything from <sxh ... to ... </sxh>
                 list($attr, $content) = preg_split('/>/u', $match, 2);
-
-                if ($this->syntax == 'sxh') {
+                if ($this->isSyntaxOk()) {
                     $attr = trim($attr);
                     if ($attr == null) {
                         // No brush and no options, use "text" with default options.
@@ -98,10 +99,8 @@ class syntax_plugin_syntaxhighlighter4 extends DokuWiki_Syntax_Plugin
                 } else {
                     $attr = null;
                 }
-
                 return array($this->syntax, $attr, $content);
         }
-
         return false;
     }
 
@@ -114,8 +113,7 @@ class syntax_plugin_syntaxhighlighter4 extends DokuWiki_Syntax_Plugin
      *
      * @return bool If rendering was successful.
      */
-    public function render($mode, Doku_Renderer $renderer, $data)
-    {
+    public function render($mode, Doku_Renderer $renderer, $data) {
         if ($mode != 'xhtml') {
             return false;
         }
@@ -124,8 +122,8 @@ class syntax_plugin_syntaxhighlighter4 extends DokuWiki_Syntax_Plugin
             return true;
         }
 
-        list($syntax, $attr, $content) = $data;
-        if ($syntax == 'sxh') {
+        list($this->syntax, $attr, $content) = $data;
+        if ($this->isSyntaxOk()) {
             $title = $this->procTitle($attr);
             $highlight = $this->procHighlight($attr);
             $renderer->doc .= '<pre class="brush: '.strtolower($attr.$highlight).'"'.$title.'>'.$renderer->_xmlEntities($content).'</pre>';
@@ -136,11 +134,13 @@ class syntax_plugin_syntaxhighlighter4 extends DokuWiki_Syntax_Plugin
         return true;
     }
 
-    private function procTitle($attr)
-    {
-        $title = '';
-
-        if (preg_match('/title:/i', $attr)) {
+    private function procTitle($attr) {
+        if ($this->syntax == 'file') {
+            $title = trim(substr($attr, strpos($attr, ' ') + 1));
+            if (!empty($title)) {
+                return ' title="' . $title . '"';
+            }
+        } elseif (preg_match('/title:/i', $attr)) {
             // Extract title(s) from $attr string.
             $attr_array = explode(';', $attr);
             $title_array = preg_grep('/title:/i', $attr_array);
@@ -149,14 +149,13 @@ class syntax_plugin_syntaxhighlighter4 extends DokuWiki_Syntax_Plugin
             $attr = implode(';', $not_title_array);
             // If there are multiple titles, use the last one.
             $title = array_pop($title_array);
-            $title = ' title="'.preg_replace("/.*title:\s{0,}(.*)/i", '$1', $title).'"';
+            return ' title="'.preg_replace("/.*title:\s{0,}(.*)/i", '$1', $title).'"';
         }
 
-        return $title;
+        return '';
     }
 
-    private function procHighlight($attr)
-    {
+    private function procHighlight($attr) {
         $highlight = '';
 
         // Check highlight attr for lines ranges
@@ -195,6 +194,19 @@ class syntax_plugin_syntaxhighlighter4 extends DokuWiki_Syntax_Plugin
         }
 
         return $highlight;
+    }
+
+    private function isSyntaxOk() {
+        if ($this->syntax == 'sxh') {
+            return true;
+        }
+        $tags = explode(',', $this->getConf('override'));
+        foreach ($tags as $tag) {
+            if ($this->syntax == $tag) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
